@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { isToday, isYesterday, format } from 'date-fns';
 
 export interface Task {
@@ -79,6 +79,9 @@ export const useTaskStore = create<State>()(
       restoreTask: (id) =>
         set({ tasks: get().tasks.map((t) => (t.id === id ? { ...t, deleted: false } : t)) }),
     }),
-    { name: 'todo-storage', storage: AsyncStorage }
+    {
+      name: 'todo-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
   )
 );
